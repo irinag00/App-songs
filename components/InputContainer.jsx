@@ -1,4 +1,11 @@
-import { View, TextInput, Button, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Image,
+  Pressable,
+} from "react-native";
 
 const InputContainer = ({
   placeholderProp,
@@ -14,7 +21,11 @@ const InputContainer = ({
         onChangeText={onChangeTextHandlerEvent}
         value={textItemProp}
       />
-      <Button title="Añadir" color="#E0AFA0" onPress={addItemToListEvent} />
+      <Pressable onPress={addItemToListEvent}>
+        <Image
+          source={require("../assets/add_circle_FILL1_wght400_GRAD0_opsz24.png")}
+        />
+      </Pressable>
     </View>
   );
 };

@@ -4,10 +4,9 @@ import {
   Text,
   View,
   Image,
-  TextInput,
-  Button,
   FlatList,
-  Modal,
+  Pressable,
+  ImageBackground,
 } from "react-native";
 import { useState } from "react";
 import InputContainer from "./components/InputContainer";
@@ -24,10 +23,13 @@ export default function App() {
   };
 
   const addItemToList = () => {
-    setItemList((prevStateList) => [
-      ...prevStateList,
-      { id: Math.random().toString(), value: textInput },
-    ]);
+    if (textInput !== "") {
+      setItemList((prevStateList) => [
+        ...prevStateList,
+        { id: Math.random().toString(), value: textInput },
+      ]);
+    }
+
     setTextInput("");
   };
 
@@ -45,11 +47,11 @@ export default function App() {
   const renderListItem = ({ item }) => (
     <View style={styles.itemList}>
       <Text>{item.value}</Text>
-      <Button
-        color="#463F3A"
-        title="X"
-        onPress={() => onSelectItemHandler(item.id)}
-      ></Button>
+      <Pressable onPress={() => onSelectItemHandler(item.id)}>
+        <Image
+          source={require("./assets/delete_FILL0_wght400_GRAD0_opsz24.png")}
+        />
+      </Pressable>
     </View>
   );
 
@@ -57,10 +59,10 @@ export default function App() {
     <>
       <View style={styles.container}>
         <View style={styles.containerText}>
-          <Text>¡Tu app de ejercicios!</Text>
+          <Text>¡Tu app de canciones!</Text>
         </View>
         <InputContainer
-          placeholderProp={"Ingresa un ejercicio"}
+          placeholderProp={"Ingresa una canción"}
           textItemProp={textInput}
           onChangeTextHandlerEvent={onChangeTextHandler}
           addItemToListEvent={addItemToList}
@@ -98,9 +100,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 5,
+    padding: 10,
     margin: 10,
-    backgroundColor: "#BCB8B1",
+    backgroundColor: "#E0AFA0",
     borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
