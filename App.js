@@ -10,6 +10,8 @@ import {
   Modal,
 } from "react-native";
 import { useState } from "react";
+import InputContainer from "./components/InputContainer";
+import ModalContainer from "./components/ModalContainer";
 
 export default function App() {
   const [textInput, setTextInput] = useState("");
@@ -20,6 +22,7 @@ export default function App() {
   const onChangeTextHandler = (text) => {
     setTextInput(text);
   };
+
   const addItemToList = () => {
     setItemList((prevStateList) => [
       ...prevStateList,
@@ -27,15 +30,18 @@ export default function App() {
     ]);
     setTextInput("");
   };
+
   const onSelectItemHandler = (id) => {
     setModalVisible(!modalVisible);
     setItemSelectedToDelete(itemList.find((item) => item.id === id));
   };
+
   const onDeleteItemHandler = () => {
     setItemList(itemList.filter((item) => item.id !== itemSelectedToDelete.id));
     // setItemSelectedToDelete({});
     setModalVisible(!modalVisible);
   };
+
   const renderListItem = ({ item }) => (
     <View style={styles.itemList}>
       <Text>{item.value}</Text>
@@ -46,45 +52,32 @@ export default function App() {
       ></Button>
     </View>
   );
+
   return (
     <>
       <View style={styles.container}>
         <View style={styles.containerText}>
-          <Text>¡Tu app de tareas!</Text>
+          <Text>¡Tu app de ejercicios!</Text>
         </View>
-        <View style={styles.inputCointainer}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Ingresar tarea"
-            onChangeText={onChangeTextHandler}
-            value={textInput}
-          />
-          <Button title="Añadir" color="#E0AFA0" onPress={addItemToList} />
-        </View>
+        <InputContainer
+          placeholderProp={"Ingresa un ejercicio"}
+          textItemProp={textInput}
+          onChangeTextHandlerEvent={onChangeTextHandler}
+          addItemToListEvent={addItemToList}
+        />
         <FlatList
           data={itemList}
           renderItem={renderListItem}
           keyExtractor={(item) => item.id}
         />
       </View>
-      <Modal animationType="slide" visible={modalVisible}>
-        <View style={styles.modalMessageContainer}>
-          <Text>Se eliminará: </Text>
-          <Text>{itemSelectedToDelete.value}</Text>
-        </View>
-        <View style={styles.modalButtonContainer}>
-          <Button
-            color={"#BCB8B1"}
-            title="Cancelar"
-            onPress={() => setModalVisible(!modalVisible)}
-          ></Button>
-          <Button
-            color="#E0AFA0"
-            title="Eliminar"
-            onPress={() => onDeleteItemHandler()}
-          ></Button>
-        </View>
-      </Modal>
+      <ModalContainer
+        animationTypeProp={"slide"}
+        isVisibleProp={modalVisible}
+        itemSelectedProp={itemSelectedToDelete}
+        onDeleteItemHandlerEvent={onDeleteItemHandler}
+        setModalVisibleEvent={setModalVisible}
+      />
     </>
   );
 }
@@ -101,16 +94,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 8,
   },
-  inputCointainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-  },
-  textInput: {
-    width: 200,
-    borderBottomColor: "#463F3A",
-    borderBottomWidth: 1,
-    marginRight: 10,
-  },
   itemList: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -119,29 +102,5 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: "#BCB8B1",
     borderRadius: 10,
-  },
-  modalMessageContainer: {
-    marginTop: 50,
-    alignItems: "center",
-  },
-  modalButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    paddingTop: 20,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
 });
